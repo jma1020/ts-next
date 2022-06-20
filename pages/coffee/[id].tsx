@@ -1,10 +1,23 @@
 import React, { useEffect } from "react"
 import axios from 'axios'
-import { GetStaticPaths, GetStaticProps } from "next"
+import { GetStaticPaths, GetStaticProps,GetServerSideProps } from "next"
+import styled from "@emotion/styled"
 
-function Detail({data}) {
 
-  console.log(data)
+interface Movie {
+  background_image : string,
+  genres: string[],
+  data_uploaded: string,
+  rating: number,
+  id: number,
+  title: string,
+  year: number,
+  summary: string
+}
+
+
+function Detail() {
+
   return(
     <div>
       디테일이다
@@ -18,7 +31,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const {data} = await axios.get(`https://yts.mx/api/v2/list_movies.json?minimum_rating=8.8&sort_by=year`)
 
   function idParamsAll() {
-    return data.data.movies.map((item)=>{
+    return data.data.movies.map((item:Movie)=>{
       return {
         params: {
           id: item.id.toString()
@@ -43,5 +56,7 @@ export const getStaticProps: GetStaticProps = async({params}) => {
     }
   }
 }
+
+
 
 export default Detail
